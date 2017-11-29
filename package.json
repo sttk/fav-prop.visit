@@ -1,0 +1,57 @@
+{
+  "name": "@fav/prop.visit",
+  "version": "0.0.0",
+  "description": "Visits each nodes in a plain object tree.",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "web/"
+  ],
+  "scripts": {
+    "lint": "eslint index.js test",
+    "test": "mocha",
+    "coverage": "nyc --reporter=lcov --reporter=text-summary npm test",
+    "coveralls": "nyc --reporter=text-lcov npm test | coveralls",
+    "web:build": "npm run web:build-src && npm run web:build-test",
+    "web:build-src": "browserify index.js --standalone fav.prop.visit -o web/fav.prop.visit.js && cd web && uglifyjs fav.prop.visit.js --compress --mangle -o fav.prop.visit.min.js --source-map url=fav.prop.visit.min.js.map",
+    "web:build-test": "node tool/mktest.js",
+    "chrome:install": "npm i --no-save mocha-chrome",
+    "chrome:test": "mocha-chrome test/web/browser-test.html",
+    "phantom:install": "npm i --no-save phantomjs-prebuilt mocha-phantomjs",
+    "phantom:test": "mocha-phantomjs -p node_modules/.bin/phantomjs test/web/browser-test.html",
+    "build": "npm run lint && npm run coverage && npm run web:build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sttk/fav-prop.visit.git"
+  },
+  "keywords": [
+    "visit",
+    "property",
+    "tree",
+    "enumerable",
+    "object",
+    "prop",
+    "fav"
+  ],
+  "author": "Takayuki Sato",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sttk/fav-prop.visit/issues"
+  },
+  "homepage": "https://github.com/sttk/fav-prop.visit#readme",
+  "dependencies": {
+    "@fav/prop.enum-own-keys": "^0.1.0",
+    "@fav/type.is-function": "^0.7.0",
+    "@fav/type.is-plain-object": "^0.7.0"
+  },
+  "devDependencies": {
+    "browserify": "^14.5.0",
+    "chai": "^3.5.0",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.11.0",
+    "mocha": "^3.4.2",
+    "nyc": "^11.3.0",
+    "uglify-js": "^3.1.9"
+  }
+}
