@@ -70,23 +70,23 @@ This function deeply traces properties which are plain objects only, and apply a
 
 The second argument function is passed following parameters, and the return value of this function controls if this function is applied to child and descendant properties of current property.
 
-##### APIs of the second argument function
+* **APIs of the second argument function**
 
-**Parameter:**
+    **Parameter:**
 
-| Parameter |   Type   | Description                             |
-|-----------|:--------:|-----------------------------------------|
-| *key*     | string   | A key of current property.              |
-| *value*   | *any*    | A value of current property.            |
-| *index*   | number   | Index of current property among sibling properties. |
-| *count*   | number   | Count of sibling properties             |
-| *parentKeys* | Array | An array which contains keys of ancestor properties and represents a trace path to current property. | 
+    | Parameter |   Type   | Description                             |
+    |-----------|:--------:|-----------------------------------------|
+    | *key*     | string   | A key of current property.              |
+    | *value*   | *any*    | A value of current property.            |
+    | *index*   | number   | Index of current property among sibling properties. |
+    | *count*   | number   | Count of sibling properties             |
+    | *parentKeys* | Array | An array which contains keys of ancestor properties and represents a trace path to current property. | 
 
-**Returns:**
+    **Returns:**
 
-True, if stop digging child and descendant properties.
+    True, if stop digging child and descendant properties.
 
-**Type:** boolean
+    **Type:** boolean
 
 ## Checked                                                                      
 
