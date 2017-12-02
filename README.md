@@ -68,9 +68,11 @@ This function deeply traces properties which are plain objects only, and apply a
 | *obj*     | object   | A plain object to be traced its properties deeply. |
 | *fn*      | function | A function to be applied to visited properties.    | 
 
-The second argument is a function of which the return type is void, and this function is passed following parameters:
+The second argument function is passed following parameters, and the return value of this function controls if this function is applied to child and descendant properties of current property.
 
-##### Parameters of the second argument function
+##### APIs of the second argument function
+
+**Parameter:**
 
 | Parameter |   Type   | Description                             |
 |-----------|:--------:|-----------------------------------------|
@@ -80,6 +82,11 @@ The second argument is a function of which the return type is void, and this fun
 | *count*   | number   | Count of sibling properties             |
 | *parentKeys* | Array | An array which contains keys of ancestor properties and represents a trace path to current property. | 
 
+**Returns:**
+
+True, if stop digging child and descendant properties.
+
+**Type:** boolean
 
 ## Checked                                                                      
 
