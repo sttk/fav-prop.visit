@@ -144,6 +144,21 @@ describe('visit', function () {
     visit(Symbol('foo'), logger);
     expect(logs.length).to.equal(0);
   });
+
+  it('Should stop digging when 2nd argument function return true', function() {
+    var src = { a: { b: { c: { d: 123 }, e: { f: 'FFF' } } } };
+    visit(src, function(key, value, index, count, parentKeys) {
+      logs.push([key, parentKeys]);
+      return (parentKeys.length >= 2);
+    });
+
+    expect(logs).to.deep.equal([
+      ['a', []],
+      ['b', ['a']],
+      ['c', ['a', 'b']],
+      ['e', ['a', 'b']],
+    ]);
+  });
 });
 
 })();
