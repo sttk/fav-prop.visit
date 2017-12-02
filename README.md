@@ -1,6 +1,6 @@
 # [@fav/prop.visit][repo-url] [![NPM][npm-img]][npm-url] [![MIT License][mit-img]][mit-url] [![Build Status][travis-img]][travis-url] [![Build Status][appveyor-img]][appveyor-url] [![Coverage status][coverage-img]][coverage-url]
 
-Visits each nodes in a plain object tree.
+Visits each properties in a plain object tree.
 
 > "fav" is an abbreviation of "favorite" and also the acronym of "for all versions".
 > This package is intended to support all Node.js versions and many browsers as possible.
@@ -124,7 +124,7 @@ This program is free software under [MIT][mit-url] License.
 See the file LICENSE in this distribution for more details.
 
 [repo-url]: https://github.com/sttk/fav-prop.visit/
-[npm-img]: https://img.shields.io/badge/npm-v0.1.0-blue.svg
+[npm-img]: https://img.shields.io/badge/npm-v0.2.0-blue.svg
 [npm-url]: https://www.npmjs.com/package/@fav/prop.visit
 [mit-img]: https://img.shields.io/badge/license-MIT-green.svg
 [mit-url]: https://opensource.org/licenses/MIT
