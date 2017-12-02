@@ -1,6 +1,6 @@
 {
   "name": "@fav/prop.visit",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Visits each properties in a plain object tree.",
   "main": "index.js",
   "files": [
