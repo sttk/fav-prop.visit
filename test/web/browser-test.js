@@ -13,7 +13,7 @@ function logger(key, value, index, count, parentKeys) {
   logs.push([key, value, index, count, parentKeys]);
 }
 
-describe('visit', function () {
+describe('fav.prop.visit', function () {
 
   beforeEach(function() {
     logs = [];
@@ -25,7 +25,8 @@ describe('visit', function () {
     expect(logs).to.deep.equal([]);
   });
 
-  it('Should visit all nodes in a plain object tree - depth=1', function() {
+  it('Should visit all key props in a plain object tree - depth=1',
+  function() {
     var obj = { a: 1, b: true, c: 'abc' };
     visit(obj, logger);
     expect(logs).to.deep.equal([
@@ -35,7 +36,32 @@ describe('visit', function () {
     ]);
   });
 
-  it('Should visit all nodes in a plain object tree - depth>=2', function() {
+  it('Should visit all symbol props in a plain object tree - depth=1',
+  function() {
+    if (typeof Symbol !== 'function') {
+      this.skip();
+      return;
+    }
+
+    var a = Symbol('a');
+    var b = Symbol('b');
+    var c = Symbol('c');
+
+    var obj = {};
+    obj[a] = 1;
+    obj[b] = true;
+    obj[c] = 'abc';
+
+    visit(obj, logger);
+    expect(logs).to.deep.equal([
+      [a, 1, 0, 3, []],
+      [b, true, 1, 3, []],
+      [c, 'abc', 2, 3, []],
+    ]);
+  });
+
+  it('Should visit all key props in a plain object tree - depth>=2',
+  function() {
     var obj = { a: 1, b: { c: true, d: { e: 'abc' } } };
     visit(obj, logger);
     expect(logs).to.deep.equal([
@@ -45,6 +71,39 @@ describe('visit', function () {
       ['d', { e: 'abc' }, 1, 2, ['b']],
       ['e', 'abc', 0, 1, ['b', 'd']],
     ]);
+  });
+
+  it('Should visit all symbol props in a plain object tree - depth>=2',
+  function() {
+    if (typeof Symbol !== 'function') {
+      this.skip();
+      return;
+    }
+
+    var a = Symbol('a');
+    var b = Symbol('b');
+    var c = Symbol('c');
+    var d = Symbol('d');
+    var e = Symbol('e');
+
+    var obj = {};
+    obj[a] = 1;
+    obj[b] = {};
+    obj[b][c] = true;
+    obj[b][d] = {};
+    obj[b][d][e] = 'abc';
+
+    visit(obj, logger);
+    expect(logs).to.deep.equal([
+      [a, 1, 0, 2, []],
+      [b, {}, 1, 2, []],
+      [c, true, 0, 2, [b]],
+      [d, {}, 1, 2, [b]],
+      [e, 'abc', 0, 1, [b, d]],
+    ]);
+    expect(logs[1][1][c]).to.equal(true);
+    expect(logs[1][1][d][e]).to.equal('abc');
+    expect(logs[3][1][e]).to.equal('abc');
   });
 
   it('Should not visit properties which are not plain objects', function() {
@@ -119,7 +178,7 @@ describe('visit', function () {
     }
   });
 
-  it('Should not visit properties which are symbols', function() {
+  it('Should not visit properties of which values are symbols', function() {
     if (typeof Symbol !== 'function') {
       this.skip();
       return;

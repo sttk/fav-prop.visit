@@ -3,7 +3,7 @@
 
 var isPlainObject = require('@fav/type.is-plain-object');
 var isFunction = require('@fav/type.is-function');
-var enumOwnKeys = require('@fav/prop.enum-own-keys');
+var enumOwnProps = require('@fav/prop.enum-own-props');
 
 function visit(obj, fn) {
   if (!isPlainObject(obj)) {
@@ -17,23 +17,23 @@ function visit(obj, fn) {
   visitEachProps(obj, fn, 0, 1, []);
 }
 
-function visitEachProps(obj, fn, index, count, parentKeys) {
-  var keys = enumOwnKeys(obj);
-  for (var i = 0, n = keys.length; i < n; i++) {
-    var key = keys[i];
-    var val = obj[key];
+function visitEachProps(obj, fn, index, count, parentProps) {
+  var props = enumOwnProps(obj);
+  for (var i = 0, n = props.length; i < n; i++) {
+    var prop = props[i];
+    var val = obj[prop];
 
-    var stopDigging = fn.call(this, key, val, i, n, parentKeys);
+    var stopDigging = fn.call(this, prop, val, i, n, parentProps);
 
     if (!stopDigging && isPlainObject(val)) {
-      visitEachProps(val, fn, i, n, parentKeys.concat(key));
+      visitEachProps(val, fn, i, n, parentProps.concat(prop));
     }
   }
 }
 
 module.exports = visit;
 
-},{"@fav/prop.enum-own-keys":2,"@fav/type.is-function":3,"@fav/type.is-plain-object":4}],2:[function(require,module,exports){
+},{"@fav/prop.enum-own-props":3,"@fav/type.is-function":5,"@fav/type.is-plain-object":6}],2:[function(require,module,exports){
 'use strict';
 
 function enumOwnKeys(obj) {
@@ -60,6 +60,52 @@ module.exports = enumOwnKeys;
 },{}],3:[function(require,module,exports){
 'use strict';
 
+var enumOwnKeys = require('@fav/prop.enum-own-keys');
+var enumOwnSymbols = require('@fav/prop.enum-own-symbols');
+
+function enumOwnProps(obj) {
+  return enumOwnKeys(obj).concat(enumOwnSymbols(obj));
+}
+
+module.exports = enumOwnProps;
+
+},{"@fav/prop.enum-own-keys":2,"@fav/prop.enum-own-symbols":4}],4:[function(require,module,exports){
+'use strict';
+
+function enumOwnSymbols(obj) {
+  /* istanbul ignore if */
+  if (typeof Symbol !== 'function') {
+    return [];
+  }
+
+  switch (typeof obj) {
+    case 'object': {
+      obj = obj || {};
+      break;
+    }
+    case 'function': {
+      break;
+    }
+    default: {
+      return [];
+    }
+  }
+
+  var symbols = Object.getOwnPropertySymbols(obj);
+  for (var i = symbols.length - 1; i >= 0; i--) {
+    var descriptor = Object.getOwnPropertyDescriptor(obj, symbols[i]);
+    if (!descriptor.enumerable) {
+      symbols.splice(i, 1);
+    }
+  }
+  return symbols;
+}
+
+module.exports = enumOwnSymbols;
+
+},{}],5:[function(require,module,exports){
+'use strict';
+
 function isFunction(value) {
   return (typeof value === 'function');
 }
@@ -75,7 +121,7 @@ Object.defineProperty(isFunction, 'not', {
 
 module.exports = isFunction;
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 function isPlainObject(value) {

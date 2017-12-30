@@ -59,7 +59,7 @@ visit({ a: 100, b: { c: 'C' } }, function(key, value, index, count, parentKeys) 
 ### <u>visit(obj, fn) : Void</u>
 
 Visits each nodes in a plain object tree.
-This function deeply traces properties which are plain objects only, and apply a given function to enumerable and own properties of the traced properties.
+This function deeply traces property nodes which are plain objects only, and apply a given function to enumerable and own properties (keys and symbols) of the traced property nodes.
 
 #### Parameters:
 
