@@ -3,13 +3,15 @@
 var chai = require('chai');
 var expect = chai.expect;
 var fav = {}; fav.prop = {}; fav.prop.visit = require('..');
+fav.type = {}; fav.type.isPlainObject = require('@fav/type.is-plain-object');
 
 var visit = fav.prop.visit;
+var isPlainObject = fav.type.isPlainObject;
 
 var logs = [];
 
-function logger(key, value, index, count, parentKeys) {
-  logs.push([key, value, index, count, parentKeys]);
+function logger(key, value, index, count, parentKeys, parentNode) {
+  logs.push([key, value, index, count, parentKeys, parentNode]);
 }
 
 describe('fav.prop.visit', function () {
@@ -29,9 +31,9 @@ describe('fav.prop.visit', function () {
     var obj = { a: 1, b: true, c: 'abc' };
     visit(obj, logger);
     expect(logs).to.deep.equal([
-      ['a', 1, 0, 3, []],
-      ['b', true, 1, 3, []],
-      ['c', 'abc', 2, 3, []],
+      ['a', 1, 0, 3, [], obj],
+      ['b', true, 1, 3, [], obj],
+      ['c', 'abc', 2, 3, [], obj],
     ]);
   });
 
@@ -53,9 +55,9 @@ describe('fav.prop.visit', function () {
 
     visit(obj, logger);
     expect(logs).to.deep.equal([
-      [a, 1, 0, 3, []],
-      [b, true, 1, 3, []],
-      [c, 'abc', 2, 3, []],
+      [a, 1, 0, 3, [], obj],
+      [b, true, 1, 3, [], obj],
+      [c, 'abc', 2, 3, [], obj],
     ]);
   });
 
@@ -64,11 +66,11 @@ describe('fav.prop.visit', function () {
     var obj = { a: 1, b: { c: true, d: { e: 'abc' } } };
     visit(obj, logger);
     expect(logs).to.deep.equal([
-      ['a', 1, 0, 2, []],
-      ['b', { c: true, d: { e: 'abc' } }, 1, 2, []],
-      ['c', true, 0, 2, ['b']],
-      ['d', { e: 'abc' }, 1, 2, ['b']],
-      ['e', 'abc', 0, 1, ['b', 'd']],
+      ['a', 1, 0, 2, [], obj],
+      ['b', { c: true, d: { e: 'abc' } }, 1, 2, [], obj],
+      ['c', true, 0, 2, ['b'], obj.b],
+      ['d', { e: 'abc' }, 1, 2, ['b'], obj.b],
+      ['e', 'abc', 0, 1, ['b', 'd'], obj.b.d],
     ]);
   });
 
@@ -94,11 +96,11 @@ describe('fav.prop.visit', function () {
 
     visit(obj, logger);
     expect(logs).to.deep.equal([
-      [a, 1, 0, 2, []],
-      [b, {}, 1, 2, []],
-      [c, true, 0, 2, [b]],
-      [d, {}, 1, 2, [b]],
-      [e, 'abc', 0, 1, [b, d]],
+      [a, 1, 0, 2, [], obj],
+      [b, {}, 1, 2, [], obj],
+      [c, true, 0, 2, [b], obj[b]],
+      [d, {}, 1, 2, [b], obj[b]],
+      [e, 'abc', 0, 1, [b, d], obj[b][d]],
     ]);
     expect(logs[1][1][c]).to.equal(true);
     expect(logs[1][1][d][e]).to.equal('abc');
@@ -110,10 +112,10 @@ describe('fav.prop.visit', function () {
     var obj = { a: [1, 2], b: { c: new Date(0) }, d: fn };
     visit(obj, logger);
     expect(logs).to.deep.equal([
-      ['a', [1, 2], 0, 3, []],
-      ['b', { c: new Date(0) }, 1, 3, []],
-      ['c', new Date(0), 0, 1, ['b']],
-      ['d', fn, 2, 3, []],
+      ['a', [1, 2], 0, 3, [], obj],
+      ['b', { c: new Date(0) }, 1, 3, [], obj],
+      ['c', new Date(0), 0, 1, ['b'], obj.b],
+      ['d', fn, 2, 3, [], obj],
     ]);
   });
 
@@ -187,9 +189,9 @@ describe('fav.prop.visit', function () {
     var obj = { a: foo, b: { c: bar } };
     visit(obj, logger);
     expect(logs).to.deep.equal([
-      ['a', foo, 0, 2, []],
-      ['b', { c: bar }, 1, 2, []],
-      ['c', bar, 0, 1, ['b']],
+      ['a', foo, 0, 2, [], obj],
+      ['b', { c: bar }, 1, 2, [], obj],
+      ['c', bar, 0, 1, ['b'], obj.b],
     ]);
   });
 
@@ -216,5 +218,15 @@ describe('fav.prop.visit', function () {
       ['c', ['a', 'b']],
       ['e', ['a', 'b']],
     ]);
+  });
+
+  it('Should update property values using parentNode', function() {
+    var src = { a: { b: { c: { d: 123 }, e: { f: 456 } } } };
+    visit(src, function(key, value, index, count, parentKeys, parentNode) {
+      if (!isPlainObject(value)) {
+        parentNode[key] = value * 2;
+      }
+    });
+    expect(src).to.deep.equal({ a: { b: { c: { d: 246 }, e: { f: 912 } } } });
   });
 });

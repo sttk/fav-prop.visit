@@ -25,13 +25,13 @@ For Node.js:
 ```js
 var visit = require('@fav/prop.visit');
 var logs = [];
-visit({ a: 100, b: { c: 'C' } }, function(key, value, index, count, parentKeys) {
-  logs.push([key, value, index, count, parentKeys]);
+visit({ a: 100, b: { c: 'C' } }, function(key, value, index, count, parentKeys, parentNode) {
+  logs.push([key, value, index, count, parentKeys, parentNode]);
 });
 // => [
-//  [ 'a', 100, 0, 2, [] ],
-//  [ 'b', { c: 'C' }, 1, 2, [] ],
-//  [ 'c', 'C', 0, 1, [ 'b' ] ] ]
+//  [ 'a', 100, 0, 2, [], { a: 100, b: { c: 'C' } } ],
+//  [ 'b', { c: 'C' }, 1, 2, [], { a: 100, b: { c: 'C' } } ],
+//  [ 'c', 'C', 0, 1, [ 'b' ], { c: 'C' } ] ]
 // ]
 ```
 
@@ -42,13 +42,13 @@ For Web browsers:
 <script>
 var visit = fav.prop.visit;
 var logs = [];
-visit({ a: 100, b: { c: 'C' } }, function(key, value, index, count, parentKeys) {
-  logs.push([key, value, index, count, parentKeys]);
+visit({ a: 100, b: { c: 'C' } }, function(key, value, index, count, parentKeys, parentNode) {
+  logs.push([key, value, index, count, parentKeys, parentNode]);
 });
 // => [
-//  [ 'a', 100, 0, 2, [] ],
-//  [ 'b', { c: 'C' }, 1, 2, [] ],
-//  [ 'c', 'C', 0, 1, [ 'b' ] ] ]
+//  [ 'a', 100, 0, 2, [], { a: 100, b: { c: 'C' } } ],
+//  [ 'b', { c: 'C' }, 1, 2, [], { a: 100, b: { c: 'C' } } ],
+//  [ 'c', 'C', 0, 1, [ 'b' ], { c: 'C' } ] ]
 // ]
 </script>
 ```
@@ -81,6 +81,7 @@ The second argument function is passed following parameters, and the return valu
     | *index*   | number   | Index of current property among sibling properties. |
     | *count*   | number   | Count of sibling properties             |
     | *parentKeys* | Array | An array which contains keys of ancestor properties and represents a trace path to current property. | 
+    | *parentNode* | object | A plain object which is a parent node. | 
 
     **Returns:**
 
