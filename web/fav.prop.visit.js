@@ -23,7 +23,7 @@ function visitEachProps(obj, fn, index, count, parentProps) {
     var prop = props[i];
     var val = obj[prop];
 
-    var stopDigging = fn.call(this, prop, val, i, n, parentProps);
+    var stopDigging = fn.call(this, prop, val, i, n, parentProps, obj);
 
     if (!stopDigging && isPlainObject(val)) {
       visitEachProps(val, fn, i, n, parentProps.concat(prop));
