@@ -80,7 +80,7 @@ The second argument function is passed following parameters, and the return valu
     | *value*   | *any*    | A value of current property.            |
     | *index*   | number   | Index of current property among sibling properties. |
     | *count*   | number   | Count of sibling properties             |
-    | *parentKeys* | Array | An array which contains keys of ancestor properties and represents a trace path to current property. | 
+    | *parentKeys* | Array | An array which contains keys of ancestor properties and represents a trace path to current property. Also, the length of this array suggests the *depth* of property tree. | 
     | *parentNode* | object | A plain object which is a parent node. | 
 
     **Returns:**
