@@ -74,14 +74,47 @@ The second argument function is passed following parameters, and the return valu
 
     **Parameter:**
 
-    | Parameter |   Type   | Description                             |
-    |-----------|:--------:|-----------------------------------------|
-    | *key*     | string   | A key of current property.              |
-    | *value*   | *any*    | A value of current property.            |
-    | *index*   | number   | Index of current property among sibling properties. |
-    | *count*   | number   | Count of sibling properties             |
-    | *parentKeys* | Array | An array which contains keys of ancestor properties and represents a trace path to current property. Also, the length of this array suggests the *depth* of property tree. | 
-    | *parentNode* | object | A plain object which is a parent node. | 
+    <table>
+    <thead>
+    <tr>
+     <th>Parameter</th>
+     <th>Type</th>
+     <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+     <td><i>key</i></td>
+     <td>string</td>
+     <td>A key of current property.</td>
+    </tr>
+    <tr>
+     <td><i>value</i></td>
+     <td><i>any</i></td>
+     <td>A value of current property.</td>
+    </tr>
+    <tr>
+     <td><i>index</i></td>
+     <td>number</td>
+     <td>Index of current property among sibling properties.</td>
+    </tr>
+    <tr>
+     <td><i>count</i></td>
+     <td>number</td>
+     <td>Count of sibling properties.</td>
+    </tr>
+    <tr>
+     <td><i>parentKeys</i></td>
+     <td>Array</td>
+     <td>An array which contains keys of ancestor properties and represents a trace path to current property. Also, the length of this array suggests the <i>depth</i> of property tree.</td>
+    </tr>
+    <tr>
+     <td><i>parentNode</i></td>
+     <td>object</td>
+     <td>A plain object which is a parent node.</td>
+    </tr>
+    </tbody>
+    </table>
 
     **Returns:**
 
